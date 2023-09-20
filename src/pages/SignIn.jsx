@@ -33,7 +33,7 @@ export default function SignIn() {
         confirmButtonText: 'Yes',
         confirmButtonColor: 'green',
       }).then((result) => {
-        result.isConfirmed ? navigate('/SignUp') : ''
+        result.isConfirmed ? navigate('/signUp') : ''
       })
     }
   }
