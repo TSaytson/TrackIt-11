@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useState, useContext } from "react";
 import LoginContainer from "../components/LoginContainer";
 import { LoginForm } from "../styles/StyledForm";
@@ -7,6 +7,7 @@ import { AuthContext } from "../contexts/Auth";
 import Swal from "sweetalert2";
 
 export default function SignIn() {
+  const navigate = useNavigate();
   const [form, setForm] = useState({
     email: '',
     password: ''
