@@ -3,23 +3,27 @@ import { useNavigate, Link } from "react-router-dom";
 import LoginContainer from "../components/LoginContainer";
 import axios from "axios";
 import { AuthContext } from "../contexts/Auth";
-import { LoginForm } from '../styles/StyledForm'
+import { LoginForm } from '../templates/LoginForm'
 import Swal from "sweetalert2";
+import { Loader } from "../templates/Loader";
 
 export default function SignUp() {
   const navigate = useNavigate();
+  const { API_URL } = useContext(AuthContext);
   const [form, setForm] = useState({
     email: '',
     password: '',
     name: '',
     image: ''
   });
-  const { API_URL } = useContext(AuthContext);
+  const [clicked, setClicked] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      const response = await axios.post(`${API_URL}/auth/sign-up`, form);
+      setClicked(true);
+      const response =
+        await axios.post(`${API_URL}/auth/sign-up`, form);
       Swal.fire({
         icon: "success",
         title: 'Created',
@@ -30,16 +34,18 @@ export default function SignUp() {
       })
       setTimeout(() => navigate('/'), 2000);
     } catch (error) {
-      console.log(error.response.data.message);
+      console.log(error.response.data);
       Swal.fire({
         icon: "error",
         title: `${error.response.data.message}`,
         text: 'Do you want to go to Sign In page?',
         showDenyButton: true,
+        toast: true,
+        position: 'top',
         confirmButtonText: 'Yes',
         confirmButtonColor: 'green',
       }).then((result) => {
-        result.isConfirmed ? navigate('/') : ''
+        result.isConfirmed ? navigate('/') : setClicked(false);
       })
     }
   }
@@ -52,34 +58,43 @@ export default function SignUp() {
     <>
       <LoginContainer>
         <h1>TrackIt</h1>
-        <LoginForm onSubmit={handleSubmit}>
+        <LoginForm clicked={clicked} onSubmit={handleSubmit}>
           <input
             name="email"
             value={form.email}
             onChange={handleForm}
             type='email'
-            placeholder="email" />
+            placeholder="email"
+            disabled={clicked}/>
           <input
             name="password"
             value={form.password}
             onChange={handleForm}
             type='password'
-            placeholder="senha" />
+            placeholder="senha"
+            disabled={clicked}/>
           <input
             name="name"
             value={form.name}
             onChange={handleForm}
             type='text'
-            placeholder='nome' />
+            placeholder='nome'
+            disabled={clicked}/>
           <input
             name="image"
             value={form.image}
             onChange={handleForm}
             type='url'
-            placeholder='foto' />
-          <button type='submit'>Cadastrar</button>
+            placeholder='foto'
+            disabled={clicked}/>
+          <button type='submit' disabled={clicked}>
+            {clicked ? <Loader></Loader> : 'Sign Up'}
+          </button>
         </LoginForm>
-        <Link to='/'>Já tem uma conta? Faça login!</Link>
+
+        <Link to='/' hidden={clicked}>
+          Já tem uma conta? Faça login!
+        </Link>
       </LoginContainer>
     </>
   )

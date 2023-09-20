@@ -10,7 +10,7 @@ export default function LoginContainer({ children }) {
 const StyledDiv = styled.div`
   @keyframes appear {
     0% {
-      filter: opacity(0%);
+      opacity:0%;
       top: -200px;
     }
     100% {
@@ -19,7 +19,7 @@ const StyledDiv = styled.div`
   }
   animation-name: appear;
   animation-duration: 1.5s;
-  margin: 25vh auto;
+  margin: 23vh auto;
   display: flex;
   position: relative;
   flex-direction: column;

@@ -6,14 +6,15 @@ export const LoginForm = styled.form`
   flex-direction: column;
   align-items: center;
   input{
-    color: #d4d4d4;
+    color: ${props => props.clicked ? '#AFAFAF' : '#d4d4d4'} ;
     width: 420px;
     height: 45px;
-    background-color: white;
+    background-color:${props => props.clicked ? '#D4D4D4' : 'white'};
     border: 1px solid #D5D5D5;
     border-radius: 5px;
     padding-left: 10px;
     margin-bottom: 5px;
+    cursor: ${props => props.clicked ? 'not-allowed' : 'pointer'};
     ::placeholder{
         font-size: 20px;
         font-family: 'Lexend Deca';
@@ -28,6 +29,9 @@ export const LoginForm = styled.form`
     }
   }
   button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
     width: 420px;
     height: 45px;
     background-color: #52B6FF;
@@ -36,12 +40,13 @@ export const LoginForm = styled.form`
     color:white;
     font-size: 20px;
     font-family: 'Lexend Deca';
-    cursor: pointer;
+    cursor: ${props => props.clicked ? 'not-allowed' : 'pointer'};
+    transition: 400ms all;
+    filter: ${props => props.clicked ? 'opacity(50%)' : ''};
     :hover{
       transform: scale(1.04);
-      filter: brightness(105%)
+      filter: ${props => props.clicked ? '' : 'brightness(105%)'};
     }
-    transition: 0.4s;
   }
   @media (max-width: 480px){
     input{
