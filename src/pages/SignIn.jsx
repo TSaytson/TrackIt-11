@@ -23,8 +23,11 @@ export default function SignIn() {
         title: `Welcome ${response.data.name}!`,
         showConfirmButton: false,
         timer: 2000,
-        footer: 'You will be redirected to today page'
-      })
+        toast: true,
+        position: 'top-right',
+        footer: "You will be redirected to today's page"
+      });
+      setTimeout(() => navigate('/today'), 2000);
     } catch (error) {
       Swal.fire({
         icon: "error",
@@ -34,7 +37,7 @@ export default function SignIn() {
         confirmButtonText: 'Yes',
         confirmButtonColor: 'green',
       }).then((result) => {
-        result.isConfirmed ? navigate('/signUp') : ''
+        result.isConfirmed ? navigate('/sign-up') : ''
       })
     }
   }

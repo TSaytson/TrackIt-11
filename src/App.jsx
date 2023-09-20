@@ -1,9 +1,10 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-import SignIn from './pages/SignIn'
-import SignUp from './pages/SignUp'
 import { ResetCSS } from './ResetCss'
 import AuthProvider from './contexts/Auth'
+import SignIn from './pages/SignIn'
+import SignUp from './pages/SignUp'
+import Today from './pages/Today'
 
 
 
@@ -16,7 +17,8 @@ function App() {
         <AuthProvider>
         <Routes>
           <Route path='/' element={<SignIn />} />
-          <Route path='/signUp' element={<SignUp />}/>
+          <Route path='/sign-up' element={<SignUp />}/>
+          <Route path='/today' element={<Today />}/>
           </Routes>
         </AuthProvider>
       </BrowserRouter>

@@ -28,7 +28,7 @@ export default function SignUp() {
         timer: 2000,
         footer: 'You will be redirected to sign in page'
       })
-      navigate('/');
+      setTimeout(() => navigate('/'), 2000);
     } catch (error) {
       console.log(error.response.data.message);
       Swal.fire({
