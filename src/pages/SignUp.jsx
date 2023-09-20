@@ -24,6 +24,8 @@ export default function SignUp() {
         icon: "success",
         title: 'Created',
         text: `User ${response.data.name} successfully created`,
+        showConfirmButton: false,
+        timer: 2000,
         footer: 'You will be redirected to sign in page'
       })
       navigate('/');
