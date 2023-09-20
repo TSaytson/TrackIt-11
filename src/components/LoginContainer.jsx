@@ -18,8 +18,8 @@ const StyledDiv = styled.div`
     }
   }
   animation-name: appear;
-  animation-duration: 1s;
-  margin: 40vh auto;
+  animation-duration: 1.5s;
+  margin: 25vh auto;
   display: flex;
   position: relative;
   flex-direction: column;

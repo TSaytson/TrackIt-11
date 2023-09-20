@@ -1,14 +1,6 @@
 import styled from "styled-components";
 
-export default function StyledForm({ children }) {
-  return (
-    <Form>
-      {children}
-    </Form>
-  )
-}
-
-const Form = styled.form`
+export const LoginForm = styled.form`
   display: flex;
   position: relative;
   flex-direction: column;
@@ -59,5 +51,4 @@ const Form = styled.form`
       width: 80vw;
     }
   }
-
 `
