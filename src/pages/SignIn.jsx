@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom"
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import LoginContainer from "../components/LoginContainer";
 import { LoginForm } from "../templates/LoginForm";
 import axios from "axios";
@@ -9,19 +9,31 @@ import { Loader } from "../templates/Loader";
 
 export default function SignIn() {
   const navigate = useNavigate();
-  const { API_URL } = useContext(AuthContext);
+  const { API_URL, setUser } = useContext(AuthContext);
   const [form, setForm] = useState({
     email: '',
     password: ''
   })
-  const [clicked, setClicked] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) navigate('/today');
+  })
 
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      setClicked(true);
+      setIsLoading(true);
       const response =
         await axios.post(`${API_URL}/auth/login`, form);
+
+      const { name, image, token } = response.data;
+      setUser({ name, image, token });
+
+      localStorage.setItem('user',
+        JSON.stringify({ name, image, token }));
+
       Swal.fire({
         icon: "success",
         title: `Welcome ${response.data.name}!`,
@@ -41,7 +53,7 @@ export default function SignIn() {
         confirmButtonText: 'Yes',
         confirmButtonColor: 'green',
       }).then((result) => {
-        result.isConfirmed ? navigate('/sign-up') : setClicked(false);
+        result.isConfirmed ? navigate('/sign-up') : setIsLoading(false);
       })
     }
   }
@@ -53,27 +65,29 @@ export default function SignIn() {
     <>
       <LoginContainer>
         <h1>TrackIt</h1>
-        <LoginForm clicked={clicked} onSubmit={handleSubmit}>
+        <LoginForm isLoading={isLoading} onSubmit={handleSubmit}>
           <input
-            disabled={clicked}
+            disabled={isLoading}
             value={form.email}
             name="email"
             type='email'
             onChange={handleForm}
-            placeholder="email" />
+            placeholder="email"
+            required />
           <input
-            disabled={clicked}
+            disabled={isLoading}
             value={form.password}
             name="password"
             type='password'
             onChange={handleForm}
-            placeholder="senha" />
-          <button type="submit" disabled={clicked}>
-            {clicked ? <Loader></Loader> : 'Sign In'}
+            placeholder="senha"
+            required />
+          <button type="submit" disabled={isLoading}>
+            {isLoading ? <Loader></Loader> : 'Sign In'}
           </button>
         </LoginForm>
 
-        <Link to='/sign-up' hidden={clicked}>
+        <Link to='/sign-up' hidden={isLoading}>
           Não tem uma conta? Cadastre-se
         </Link>
       </LoginContainer>

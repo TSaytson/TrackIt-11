@@ -1,9 +1,11 @@
+import { Link } from "react-router-dom"
 import styled from "styled-components"
 
 export default function Footer() {
   return (
     <StyledFooter>
-      <h1>Desenvolvido com amor por Mariana e Thiago</h1>
+      <Link to='/habits'>Habits</Link>
+      <Link to='/historic'>Historic</Link>
     </StyledFooter>
   )
 }
@@ -18,11 +20,32 @@ const StyledFooter = styled.footer`
       bottom: 0;
     }
   }
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   animation: animateBottom;
   animation-duration: 2s;
-  position: relative;
+  position: fixed;
+  bottom: 0;
+  left: 0;
   height: 70px;
   width: 100%;
   background-color: white;
-  border-top: #5987c7;
+  border-top: 2px solid #5987c7;
+  a {
+    color: #52B6FF;
+    font-family: 'Lexend Deca';
+    font-size: 18px;
+    transition: 0.4s all;
+    :hover{
+      filter: brightness(115%);
+      transform: scale(1.05);
+    }
+  }
+  a:nth-child(1){
+    margin-left: 35px;
+  }
+  a:nth-child(2){
+    margin-right: 35px;
+  }
 `

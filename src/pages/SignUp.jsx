@@ -16,12 +16,12 @@ export default function SignUp() {
     name: '',
     image: ''
   });
-  const [clicked, setClicked] = useState(false);
+  const [loading, setloading] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      setClicked(true);
+      setloading(true);
       const response =
         await axios.post(`${API_URL}/auth/sign-up`, form);
       Swal.fire({
@@ -45,7 +45,7 @@ export default function SignUp() {
         confirmButtonText: 'Yes',
         confirmButtonColor: 'green',
       }).then((result) => {
-        result.isConfirmed ? navigate('/') : setClicked(false);
+        result.isConfirmed ? navigate('/') : setloading(false);
       })
     }
   }
@@ -58,41 +58,45 @@ export default function SignUp() {
     <>
       <LoginContainer>
         <h1>TrackIt</h1>
-        <LoginForm clicked={clicked} onSubmit={handleSubmit}>
+        <LoginForm loading={loading} onSubmit={handleSubmit}>
           <input
             name="email"
             value={form.email}
             onChange={handleForm}
             type='email'
             placeholder="email"
-            disabled={clicked}/>
+            disabled={loading}
+            required />
           <input
             name="password"
             value={form.password}
             onChange={handleForm}
             type='password'
             placeholder="senha"
-            disabled={clicked}/>
+            disabled={loading}
+            required />
           <input
             name="name"
             value={form.name}
             onChange={handleForm}
             type='text'
             placeholder='nome'
-            disabled={clicked}/>
+            disabled={loading}
+            required />
           <input
             name="image"
             value={form.image}
             onChange={handleForm}
             type='url'
             placeholder='foto'
-            disabled={clicked}/>
-          <button type='submit' disabled={clicked}>
-            {clicked ? <Loader></Loader> : 'Sign Up'}
+            disabled={loading}
+            required />
+          <button type='submit' disabled={loading}>
+            {loading ? <Loader></Loader> : 'Sign Up'}
           </button>
         </LoginForm>
 
-        <Link to='/' hidden={clicked}>
+        <Link to='/' hidden={loading}>
           Já tem uma conta? Faça login!
         </Link>
       </LoginContainer>

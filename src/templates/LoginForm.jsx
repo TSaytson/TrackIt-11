@@ -5,16 +5,17 @@ export const LoginForm = styled.form`
   position: relative;
   flex-direction: column;
   align-items: center;
+  margin-top: 35px;
   input{
-    color: ${props => props.clicked ? '#AFAFAF' : '#d4d4d4'} ;
+    color: ${props => props.loading ? '#AFAFAF' : '#d4d4d4'} ;
     width: 420px;
     height: 45px;
-    background-color:${props => props.clicked ? '#D4D4D4' : 'white'};
+    background-color:${props => props.loading ? '#D4D4D4' : 'white'};
     border: 1px solid #D5D5D5;
     border-radius: 5px;
     padding-left: 10px;
     margin-bottom: 5px;
-    cursor: ${props => props.clicked ? 'not-allowed' : 'pointer'};
+    cursor: ${props => props.loading ? 'not-allowed' : 'pointer'};
     ::placeholder{
         font-size: 20px;
         font-family: 'Lexend Deca';
@@ -40,12 +41,12 @@ export const LoginForm = styled.form`
     color:white;
     font-size: 20px;
     font-family: 'Lexend Deca';
-    cursor: ${props => props.clicked ? 'not-allowed' : 'pointer'};
+    cursor: ${props => props.loading ? 'not-allowed' : 'pointer'};
     transition: 400ms all;
-    filter: ${props => props.clicked ? 'opacity(50%)' : ''};
+    filter: ${props => props.loading ? 'opacity(50%)' : ''};
     :hover{
       transform: scale(1.04);
-      filter: ${props => props.clicked ? '' : 'brightness(105%)'};
+      filter: ${props => props.loading ? '' : 'brightness(105%)'};
     }
   }
   @media (max-width: 480px){

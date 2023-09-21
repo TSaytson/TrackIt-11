@@ -19,7 +19,7 @@ const StyledDiv = styled.div`
   }
   animation-name: appear;
   animation-duration: 1.5s;
-  margin: 23vh auto;
+  margin: 21vh auto;
   display: flex;
   position: relative;
   flex-direction: column;

@@ -1,11 +1,11 @@
 import styled from "styled-components"
 
 
-export default function Header({imageUrl}) {
+export default function Header({ image }) {
   return (
     <StyledHeader>
       <h1>TrackIt</h1>
-      <img src="https://evorastudio.com.br/wp-content/uploads/2021/04/retrato-corporativo-foto-perfil-profissional-foto-linkedin-24-scaled.jpg"></img>
+      <img src={image}></img>
     </StyledHeader>
   )
 }
@@ -29,16 +29,18 @@ const StyledHeader = styled.header`
   width: 100%;
   background-color: #126BA5;
   height: 70px;
+  margin-bottom: 30px;
+  img {
+    width: 62px;
+    height: 62px;
+    margin-right: 18px;
+    border-radius: 50%;
+  }
   h1 {
     margin-left: 18px;
     color: white;
     font-family: 'Playball';
     font-size: 38px;
   }
-  img {
-    width: 51px;
-    height: 51px;
-    margin-right: 18px;
-    border-radius: 50%;
-  }
+  
 `
