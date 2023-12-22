@@ -1,11 +1,23 @@
 import { Link } from "react-router-dom"
 import styled from "styled-components"
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar"
+import 'react-circular-progressbar/dist/styles.css'
 
 export default function Footer() {
   return (
     <StyledFooter>
-      <Link to='/habits'>Habits</Link>
-      <Link to='/historic'>Historic</Link>
+      <Link to='/habits'>Hábitos</Link>
+      <Link to='/today'>
+        <div>
+          <CircularProgressbar value={66} text="Hoje"
+            styles={buildStyles({
+              pathColor: '#fff',
+              textColor: '#fff',
+              trailColor: '#52b6ff',
+          })}/>
+        </div>
+      </Link>
+      <Link to='/historic'>Histórico</Link>
     </StyledFooter>
   )
 }
@@ -22,7 +34,7 @@ const StyledFooter = styled.footer`
   }
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: space-around;
   animation: animateBottom;
   animation-duration: 2s;
   position: fixed;
@@ -37,15 +49,17 @@ const StyledFooter = styled.footer`
     font-family: 'Lexend Deca';
     font-size: 18px;
     transition: 0.4s all;
+    div{
+      width: 91px;
+      height: 91px;
+      border-radius: 50%;
+      background-color: #52B6FF;
+      border: 8px solid #52B6FF;
+      margin-bottom: 60px;
+    }
     :hover{
       filter: brightness(115%);
       transform: scale(1.05);
     }
-  }
-  a:nth-child(1){
-    margin-left: 35px;
-  }
-  a:nth-child(2){
-    margin-right: 35px;
   }
 `

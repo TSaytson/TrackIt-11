@@ -1,6 +1,6 @@
 import { weekDay } from "../constants/weekDays"
 
-export const Day = () => {
+export const day = () => {
 
   const date = new Date();
   

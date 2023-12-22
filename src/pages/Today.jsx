@@ -6,7 +6,7 @@ import { AuthContext } from "../contexts/Auth";
 import { Titles } from "../templates/Titles";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Day } from "../utils/getDay";
+import { day } from "../utils/getDay";
 import { Loader } from "../templates/Loader";
 
 export default function Today() {
@@ -37,13 +37,13 @@ export default function Today() {
   }, [])
   return (
     habits ?
-    <Div>
-      <Header image={user.image} />
-      <Titles>
-        <h1>{Day()}</h1>
-        <h2>{habits.length ? `` : 'There is no habit finished yet'}</h2>
-      </Titles>
-      <Footer />
+      <Div>
+        <Header image={user.image} />
+        <Titles>
+          <h1>{day()}</h1>
+          <h2>{habits.length ? `` : 'There is no habit finished yet'}</h2>
+        </Titles>
+        <Footer linkLeft={'habits'} linkRight={'historic'}/>
       </Div > : <Loader isBig={true} />
   )
 }
