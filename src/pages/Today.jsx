@@ -14,7 +14,7 @@ export default function Today() {
   const { API_URL, user, setUser } = useContext(AuthContext);
   const [habits, setHabits] = useState(null);
 
-  async function getHabits(token) {
+  async function getHabitsToday(token) {
     const headers = {
       "authorization": `Bearer ${token}`
     }
@@ -32,7 +32,7 @@ export default function Today() {
       navigate('/')
     else {
       setUser(localUser);
-      getHabits(localUser.token);
+      getHabitsToday(localUser.token);
     }
   }, [])
   return (
@@ -51,4 +51,7 @@ export default function Today() {
 const Div = styled.div`
   height: 99vh;
   background-color: #F2F2F2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `

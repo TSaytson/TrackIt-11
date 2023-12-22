@@ -11,6 +11,7 @@ export default function Footer() {
         <div>
           <CircularProgressbar value={66} text="Hoje"
             styles={buildStyles({
+              pathTransitionDuration: 0.5,
               pathColor: '#fff',
               textColor: '#fff',
               trailColor: '#52b6ff',
@@ -54,7 +55,7 @@ const StyledFooter = styled.footer`
       height: 91px;
       border-radius: 50%;
       background-color: #52B6FF;
-      border: 8px solid #52B6FF;
+      border: 6px solid #52B6FF;
       margin-bottom: 60px;
     }
     :hover{

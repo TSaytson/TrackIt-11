@@ -1,12 +1,29 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import { AuthContext } from "../contexts/Auth";
 import styled from "styled-components";
 import { Loader } from "../templates/Loader";
+import axios from "axios";
+import { Titles } from "../templates/Titles";
+import HabitContainer from "../components/HabitContainer";
 
 export default function Habits() {
   const { API_URL, user, setUser } = useContext(AuthContext)
+  const [habits, setHabits] = useState(null)
+  const [showForm, setShowForm] = useState(false)
+
+  async function getHabits(token) {
+    const headers = {
+      "authorization": `Bearer ${token}`
+    }
+    try {
+      const response = await axios.get(`${API_URL}/habits`, { headers });
+      setHabits(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   useEffect(() => {
     const localUser = JSON.parse(localStorage.getItem('user'));
@@ -14,20 +31,45 @@ export default function Habits() {
       navigate('/')
     else {
       setUser(localUser);
+      getHabits(localUser.token);
     }
   }, [])
 
   return (
-    user ?
-      <Div>
+    habits ?
+      <Main>
         <Header image={user.image} />
+        <Titles isHabits={true}>
+          <h1>Meus hábitos</h1>
+          <button onClick={() => setShowForm(true)}>+</button>
+        </Titles>
+        {showForm ?
+          <HabitContainer
+            token={user.token}
+            setShowForm={setShowForm}
+          /> : ''}
+        {habits.length ? 
+          <ul>
+            {habits.forEach(habit =>
+              <li>{habit}</li>
+            )}
+          </ul> :
+          <Titles>
+            <h2>
+              Você não tem nenhum hábito cadastrado ainda.
+              Adicione um hábito para começar a trackear.
+            </h2>
+          </Titles>}
         <Footer linkLeft={'today'} linkRight={'historic'}/>
-      </Div>
+      </Main>
       : <Loader isBig={true} />
   )
 }
 
-const Div = styled.div`
+const Main = styled.main`
   height: 99vh;
   background-color: #F2F2F2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `
