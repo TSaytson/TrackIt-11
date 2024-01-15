@@ -7,6 +7,7 @@ import { Loader } from "../templates/Loader";
 import axios from "axios";
 import { Titles } from "../templates/Titles";
 import HabitContainer from "../components/HabitContainer";
+import HabitsList from "../components/HabitsList";
 
 export default function Habits() {
   const { API_URL, user, setUser } = useContext(AuthContext)
@@ -19,6 +20,7 @@ export default function Habits() {
     }
     try {
       const response = await axios.get(`${API_URL}/habits`, { headers });
+      console.log('setou com o get habits', response.data);
       setHabits(response.data);
     } catch (error) {
       console.log(error);
@@ -31,12 +33,11 @@ export default function Habits() {
       navigate('/')
     else {
       setUser(localUser);
-      getHabits(localUser.token);
     }
   }, [])
 
   return (
-    habits ?
+    user ?
       <Main>
         <Header image={user.image} />
         <Titles isHabits={true}>
@@ -47,20 +48,15 @@ export default function Habits() {
           <HabitContainer
             token={user.token}
             setShowForm={setShowForm}
+            getHabits={getHabits}
+            setHabits={setHabits}
           /> : ''}
-        {habits.length ? 
-          <ul>
-            {habits.forEach(habit =>
-              <li>{habit}</li>
-            )}
-          </ul> :
-          <Titles>
-            <h2>
-              Você não tem nenhum hábito cadastrado ainda.
-              Adicione um hábito para começar a trackear.
-            </h2>
-          </Titles>}
-        <Footer linkLeft={'today'} linkRight={'historic'}/>
+        <HabitsList token={user.token}
+          API_URL={API_URL}
+          habits={habits}
+          setHabits={setHabits} />
+          
+        <Footer linkLeft={'today'} linkRight={'historic'} />
       </Main>
       : <Loader isBig={true} />
   )

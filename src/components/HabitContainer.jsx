@@ -1,32 +1,57 @@
 import { useState } from "react";
 import { HabitForm } from "../templates/HabitForm"
 import { weekDay } from "../constants/weekDays";
+import axios from "axios";
+import { useContext } from "react";
+import { AuthContext } from "../contexts/Auth";
+import Swal from "sweetalert2";
 
-export default function HabitContainer({ setShowForm, token }) {
+export default function HabitContainer({getHabits, setHabits, setShowForm, token }) {
+  const { API_URL } = useContext(AuthContext)
   const [habitForm, setHabitForm] = useState({
     name: '',
     days: []
   })
-  
+
   async function createHabit(e) {
     e.preventDefault();
-    console.log(token)
     const headers = {
       "authorization": `Bearer ${token}`
     }
-    // try {
-    //   const response = await axios.post(`${API_URL}/habits`, {}, { headers });
-    //   setHabits(response.data);
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      if (!habitForm.days.length) {
+        throw {
+          response: {
+            data: {
+              details: 'Select at least one day'
+            }
+          }
+        }
+      }
+      const response = await axios.post(`${API_URL}/habits`, habitForm, { headers });
+      //refactor
+      getHabits(token)
+    } catch (error) {
+      console.log(error)
+      Swal.fire({
+        icon: "error",
+        title: `${error.response.data.details}`,
+        toast: true,
+        position: "top",
+        showConfirmButton: false,
+        timer: 2000
+      })
+    }
   }
 
   function handleHabitForm(e) {
-    console.log(e.target)
-    console.log({ ...habitForm, [e.target.name]: e.target.id })
+    if (e.target.name === 'name')
+      setHabitForm({ ...habitForm, [e.target.name]: e.target.value })
+    else if (!habitForm[e.target.name].includes(e.target.id))
+        habitForm[e.target.name].push(e.target.id)
+    console.log(habitForm)
   }
-  
+
   return (
     <HabitForm onSubmit={createHabit}>
       <div className="habitInput">
@@ -41,6 +66,7 @@ export default function HabitContainer({ setShowForm, token }) {
         {weekDay.map((day, index) =>
           <button type="button"
             id={index}
+            key={index}
             onClick={handleHabitForm}
             name="days">
             {day[0]}
