@@ -5,6 +5,7 @@ import axios from "axios";
 import { useContext } from "react";
 import { AuthContext } from "../contexts/Auth";
 import Swal from "sweetalert2";
+import WeekButton from "./WeekButton";
 
 export default function HabitContainer({getHabits, setHabits, setShowForm, token }) {
   const { API_URL } = useContext(AuthContext)
@@ -28,7 +29,18 @@ export default function HabitContainer({getHabits, setHabits, setShowForm, token
           }
         }
       }
+      console.log(habitForm)
       const response = await axios.post(`${API_URL}/habits`, habitForm, { headers });
+      console.log(response.data)
+      Swal.fire({
+        icon: "success",
+        title: `Habit successfully created`,
+        text: `${response.data.name}`,
+        toast: true,
+        position: "top",
+        showConfirmButton: false,
+        timer: 2000
+      })
       //refactor
       getHabits(token)
     } catch (error) {
@@ -45,6 +57,7 @@ export default function HabitContainer({getHabits, setHabits, setShowForm, token
   }
 
   function handleHabitForm(e) {
+    console.log('ta aqui')
     if (e.target.name === 'name')
       setHabitForm({ ...habitForm, [e.target.name]: e.target.value })
     else if (!habitForm[e.target.name].includes(e.target.id))
@@ -62,17 +75,19 @@ export default function HabitContainer({getHabits, setHabits, setShowForm, token
           onChange={handleHabitForm}
         />
       </div>
-      <div className="weekButtons">
-        {weekDay.map((day, index) =>
-          <button type="button"
-            id={index}
+
+      <ul className="weekButtons">
+        {weekDay.map((day, index) => 
+          <WeekButton
+            index={index}
             key={index}
-            onClick={handleHabitForm}
-            name="days">
-            {day[0]}
-          </button>
+            day={day}
+            name="days"
+            days={habitForm.days}
+          />
         )}
-      </div>
+      </ul>
+
       <div className="controlButtons">
         <button type="button" onClick={() => setShowForm(false)}>Cancelar</button>
         <button type="submit">Salvar</button>

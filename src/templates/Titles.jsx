@@ -17,7 +17,7 @@ export const Titles = styled.section`
   width: 100%;
   max-width: 340px;
   ${(props) => 
-  props.isHabits && 
+  props.hasHabits && 
   `
   display: flex;
   align-items: center;

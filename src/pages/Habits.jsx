@@ -40,9 +40,9 @@ export default function Habits() {
 
   return (
     user ?
-      <Main>
+      <Main hasHabits={true}>
         <Header image={user.image} />
-        <Titles isHabits={true}>
+        <Titles hasHabits={true}>
           <h1>Meus hábitos</h1>
           <button onClick={() => setShowForm(true)}>+</button>
         </Titles>
@@ -57,15 +57,17 @@ export default function Habits() {
           API_URL={API_URL}
           habits={habits}
           setHabits={setHabits} />
-          
+
         <Footer linkLeft={'today'} linkRight={'historic'} />
       </Main>
       : <Loader isBig={true} />
+      
   )
 }
 
 const Main = styled.main`
-  height: 99vh;
+  height: ${props => props.hasHabits ? "100vh" : "100%"};
+  margin-bottom: 70px;
   background-color: #F2F2F2;
   display: flex;
   flex-direction: column;

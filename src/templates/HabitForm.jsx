@@ -6,10 +6,10 @@ export const HabitForm = styled.form`
   background-color: white;
   border-radius: 5px;
   margin-bottom: 30px;
-  div{
+  div, ul{
     width: 90%;
     margin-left: 16px;
-    button{
+    button, li{
       cursor: pointer;
     }
   }
@@ -28,20 +28,12 @@ export const HabitForm = styled.form`
       }
     }
   }
+
   .weekButtons{
     margin-top: 8px;
-    button {
-      width: 30px;
-      height: 30px;
-      margin-right: 5px;
-      border-radius: 5px;
-      border: 1px solid #d4d4d4;
-      background-color: white;
-      color: #dbdbdb;
-      font-size: 20px;
-      font-family: 'Lexend Deca';
-    }
+    display: flex;
   }
+
   .controlButtons{
     margin-top: 30px;
     display: flex;

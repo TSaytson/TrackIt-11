@@ -1,8 +1,9 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Titles } from "../templates/Titles";
 import styled from "styled-components";
 import { weekDay } from "../constants/weekDays";
+import Swal from "sweetalert2";
 
 export default function HabitsList({ habits, setHabits, API_URL, token }) {
 
@@ -19,13 +20,31 @@ export default function HabitsList({ habits, setHabits, API_URL, token }) {
     }
   }
 
-  async function deleteHabit(id) {
+  async function deleteHabit(id, index) {
     const headers = {
       "authorization": `Bearer ${token}`
     }
     try {
-      const response = await axios.delete(`${API_URL}/habits/${id}`, { headers });
-      getHabits(token)
+      Swal.fire({
+        icon: "warning",
+        title: "Deleting habit",
+        text: `Do you want to delete ${habits[index].name} ?`,
+        showDenyButton: true,
+        toast: true,
+        position: 'top',
+        confirmButtonText: "Yes",
+        confirmButtonColor: "green"
+      }).then((result) => {
+        if (result.isConfirmed) {
+          console.log('should be deleting')
+          axios.delete(`${API_URL}/habits/${id}`, { headers })
+            .then(() => {
+              getHabits(token)
+              getHabits(token)
+            })
+            .catch(error => console.log(error))
+        }
+      })
     } catch (error) {
       console.log(error)
     }
@@ -51,7 +70,7 @@ export default function HabitsList({ habits, setHabits, API_URL, token }) {
                 </main>
                 <aside>
                   <ion-icon name="trash-outline"
-                    onClick={() => deleteHabit(habit.id)}
+                    onClick={() => deleteHabit(habit.id, index)}
                   />
                 </aside>
               </div>
@@ -70,11 +89,13 @@ export default function HabitsList({ habits, setHabits, API_URL, token }) {
 }
 
 export const Habits = styled.ul`
+  height: 100vh;
   li{
     width: 340px;
     height: 90px;
     background-color: white;
     border-radius: 5px;
+    margin-bottom: 10px;
     div{
       display: flex;
       justify-content: space-between;
