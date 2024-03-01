@@ -16,12 +16,12 @@ export default function SignUp() {
     name: '',
     image: ''
   });
-  const [loading, setloading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      setloading(true);
+      setIsLoading(true);
       const response =
         await axios.post(`${API_URL}/auth/sign-up`, form);
       Swal.fire({
@@ -45,7 +45,7 @@ export default function SignUp() {
         confirmButtonText: 'Yes',
         confirmButtonColor: 'green',
       }).then((result) => {
-        result.isConfirmed ? navigate('/') : setloading(false);
+        result.isConfirmed ? navigate('/') : setIsLoading(false);
       })
     }
   }
@@ -58,14 +58,14 @@ export default function SignUp() {
     <>
       <LoginContainer>
         <h1>TrackIt</h1>
-        <LoginForm loading={loading} onSubmit={handleSubmit}>
+        <LoginForm isLoading={isLoading} onSubmit={handleSubmit}>
           <input
             name="email"
             value={form.email}
             onChange={handleForm}
             type='email'
             placeholder="email"
-            disabled={loading}
+            disabled={isLoading}
             required />
           <input
             name="password"
@@ -73,7 +73,7 @@ export default function SignUp() {
             onChange={handleForm}
             type='password'
             placeholder="senha"
-            disabled={loading}
+            disabled={isLoading}
             required />
           <input
             name="name"
@@ -81,7 +81,7 @@ export default function SignUp() {
             onChange={handleForm}
             type='text'
             placeholder='nome'
-            disabled={loading}
+            disabled={isLoading}
             required />
           <input
             name="image"
@@ -89,14 +89,14 @@ export default function SignUp() {
             onChange={handleForm}
             type='url'
             placeholder='foto'
-            disabled={loading}
+            disabled={isLoading}
             required />
-          <button type='submit' disabled={loading}>
-            {loading ? <Loader></Loader> : 'Sign Up'}
+          <button type='submit' disabled={isLoading}>
+            {isLoading ? <Loader></Loader> : 'Sign Up'}
           </button>
         </LoginForm>
 
-        <Link to='/' hidden={loading}>
+        <Link to='/' hidden={isLoading}>
           Já tem uma conta? Faça login!
         </Link>
       </LoginContainer>

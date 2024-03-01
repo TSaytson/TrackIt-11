@@ -8,11 +8,13 @@ import axios from "axios";
 import { Titles } from "../templates/Titles";
 import HabitContainer from "../components/HabitContainer";
 import HabitsList from "../components/HabitsList";
+import { useNavigate } from "react-router-dom";
 
 export default function Habits() {
   const { API_URL, user, setUser } = useContext(AuthContext)
   const [habits, setHabits] = useState(null)
   const [showForm, setShowForm] = useState(false)
+  const navigate = useNavigate()
 
   async function getHabits(token) {
     const headers = {
