@@ -4,8 +4,9 @@ import { Titles } from "../templates/Titles";
 import styled from "styled-components";
 import { weekDay } from "../constants/weekDays";
 import Swal from "sweetalert2";
+import SelectDays from "./SelectDays";
 
-export default function HabitsList({ habits, setHabits, API_URL, token }) {
+export default function ListHabits({ habits, setHabits, API_URL, token }) {
 
   async function getHabits(token) {
     const headers = {
@@ -65,8 +66,15 @@ export default function HabitsList({ habits, setHabits, API_URL, token }) {
               <div>
                 <main className="weekButtons">
                   <h1>{habit.name}</h1>
-                  {habit.days.map((day) =>
-                    <button key={day}>{weekDay[day][0]}</button>)}
+                  {weekDay.map((day, index) =>
+                    <SelectDays
+                      key={index}
+                      index={index}
+                      day={day}
+                      days={habit.days}
+                      list={true}
+                    />
+                  )}
                 </main>
                 <aside>
                   <ion-icon name="trash-outline"
@@ -107,21 +115,9 @@ export const Habits = styled.ul`
       font-size: 24px;
     }
     .weekButtons{
-    margin-top: 10px;
-    margin-left: 15px;
-    font-family: 'Lexend Deca';
-    button {
-      width: 30px;
-      height: 30px;
       margin-top: 10px;
-      margin-right: 5px;
-      border-radius: 5px;
-      border: 1px solid #d4d4d4;
-      background-color: white;
-      color: #dbdbdb;
-      font-size: 20px;
+      margin-left: 15px;
       font-family: 'Lexend Deca';
     }
-  }
   }
 `

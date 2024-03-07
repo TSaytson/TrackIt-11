@@ -6,8 +6,8 @@ import styled from "styled-components";
 import { Loader } from "../templates/Loader";
 import axios from "axios";
 import { Titles } from "../templates/Titles";
-import HabitContainer from "../components/HabitContainer";
-import HabitsList from "../components/HabitsList";
+import HabitContainer from "../components/CreateHabitContainer";
+import HabitsList from "../components/ListHabits";
 import { useNavigate } from "react-router-dom";
 
 export default function Habits() {
@@ -44,7 +44,7 @@ export default function Habits() {
         <Header image={user.image} />
         <Titles hasHabits={true}>
           <h1>Meus hábitos</h1>
-          <button onClick={() => setShowForm(true)}>+</button>
+          <button onClick={() => setShowForm(!showForm)}>+</button>
         </Titles>
         {showForm ?
           <HabitContainer

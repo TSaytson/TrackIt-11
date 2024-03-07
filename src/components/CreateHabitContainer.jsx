@@ -5,9 +5,9 @@ import axios from "axios";
 import { useContext } from "react";
 import { AuthContext } from "../contexts/Auth";
 import Swal from "sweetalert2";
-import WeekButton from "./WeekButton";
+import WeekButton from "./SelectDays";
 
-export default function HabitContainer({getHabits, setHabits, setShowForm, token }) {
+export default function CreateHabitContainer({getHabits, setHabits, setShowForm, token }) {
   const { API_URL } = useContext(AuthContext)
   const [habitForm, setHabitForm] = useState({
     name: '',
@@ -57,7 +57,6 @@ export default function HabitContainer({getHabits, setHabits, setShowForm, token
   }
 
   function handleHabitForm(e) {
-    console.log('ta aqui')
     if (e.target.name === 'name')
       setHabitForm({ ...habitForm, [e.target.name]: e.target.value })
     else if (!habitForm[e.target.name].includes(e.target.id))
@@ -79,10 +78,10 @@ export default function HabitContainer({getHabits, setHabits, setShowForm, token
       <ul className="weekButtons">
         {weekDay.map((day, index) => 
           <WeekButton
-            index={index}
             key={index}
-            day={day}
             name="days"
+            index={index}
+            day={day}
             days={habitForm.days}
           />
         )}
