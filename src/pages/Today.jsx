@@ -8,13 +8,16 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { day } from "../utils/getDay";
 import { Loader } from "../templates/Loader";
+import ListHabits from "../components/ListHabits";
+import ListTodayHabits from "../components/ListTodayHabits";
 
 export default function Today() {
   const navigate = useNavigate();
   const { API_URL, user, setUser } = useContext(AuthContext);
   const [habits, setHabits] = useState(null);
+  const [finishedHabits, setFinishedHabits] = useState([])
 
-  async function getHabitsToday(token) {
+  async function getTodayHabits(token) {
     const headers = {
       "authorization": `Bearer ${token}`
     }
@@ -32,7 +35,11 @@ export default function Today() {
       navigate('/')
     else {
       setUser(localUser);
-      getHabitsToday(localUser.token);
+      getTodayHabits(localUser.token);
+      console.log('console do useEffect', habits)
+      if (habits) {
+        setFinishedHabits(habits.filter(habit => habit.done))
+      }
     }
   }, [])
   return (
@@ -41,9 +48,12 @@ export default function Today() {
         <Header image={user.image} />
         <Titles>
           <h1>{day()}</h1>
-          <h2>{habits.length ? `` : 'There is no habit finished yet'}</h2>
+          <h2>{finishedHabits.length ? `` : 'There is no habit finished yet'}</h2>
         </Titles>
-        <Footer linkLeft={'habits'} linkRight={'historic'}/>
+        <ListTodayHabits
+          habits={habits}
+        />
+        <Footer linkLeft={'habits'} linkRight={'historic'} />
       </Div > : <Loader isBig={true} />
   )
 }

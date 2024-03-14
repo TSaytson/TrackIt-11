@@ -1,6 +1,30 @@
 import styled from "styled-components";
 
 export const HabitForm = styled.form`
+  @keyframes slideDown {
+    0% {
+      top: -30px;
+      opacity: 0%;
+    }
+
+    100% {
+      top: 0;
+    }
+  }
+
+  @keyframes slideUp {
+    0% {
+      top: 0;
+    }
+
+    100%{
+      top: -50px;
+      opacity: 0%;
+    }
+  }
+  animation-name: ${props => props.$animation ? 'slideUp' : 'slideDown'};
+  animation-duration: 1s;
+  position: relative;
   height: 180px;
   width: 340px;
   background-color: white;

@@ -6,8 +6,11 @@ import { useContext } from "react";
 import { AuthContext } from "../contexts/Auth";
 import Swal from "sweetalert2";
 import WeekButton from "./SelectDays";
+import { useEffect } from "react";
 
-export default function CreateHabitContainer({getHabits, setHabits, setShowForm, token }) {
+export default function CreateHabitContainer({
+  getHabits, setHabits, showForm, animation, handleShowForm, token 
+}) {
   const { API_URL } = useContext(AuthContext)
   const [habitForm, setHabitForm] = useState({
     name: '',
@@ -64,8 +67,11 @@ export default function CreateHabitContainer({getHabits, setHabits, setShowForm,
     console.log(habitForm)
   }
 
+  
+
   return (
-    <HabitForm onSubmit={createHabit}>
+    showForm ?
+    <HabitForm onSubmit={createHabit} $show={showForm} $animation={animation}>
       <div className="habitInput">
         <input
           type="text"
@@ -88,9 +94,9 @@ export default function CreateHabitContainer({getHabits, setHabits, setShowForm,
       </ul>
 
       <div className="controlButtons">
-        <button type="button" onClick={() => setShowForm(false)}>Cancelar</button>
+        <button type="button" onClick={handleShowForm}>Cancelar</button>
         <button type="submit">Salvar</button>
       </div>
-    </HabitForm>
+    </HabitForm> : ''
   )
 }

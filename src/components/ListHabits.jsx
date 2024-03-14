@@ -6,27 +6,14 @@ import { weekDay } from "../constants/weekDays";
 import Swal from "sweetalert2";
 import SelectDays from "./SelectDays";
 
-export default function ListHabits({ habits, setHabits, API_URL, token }) {
-
-  async function getHabits(token) {
-    const headers = {
-      "authorization": `Bearer ${token}`
-    }
-    try {
-      const response = await axios.get(`${API_URL}/habits`, { headers });
-      console.log('setou com o get habits', response.data);
-      setHabits(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  }
+export default function ListHabits({ habits, setHabits, token }) {
 
   async function deleteHabit(id, index) {
     const headers = {
       "authorization": `Bearer ${token}`
     }
     try {
-      Swal.fire({
+      const result = await Swal.fire({
         icon: "warning",
         title: "Deleting habit",
         text: `Do you want to delete ${habits[index].name} ?`,
@@ -34,28 +21,37 @@ export default function ListHabits({ habits, setHabits, API_URL, token }) {
         toast: true,
         position: 'top',
         confirmButtonText: "Yes",
-        confirmButtonColor: "green"
-      }).then((result) => {
-        if (result.isConfirmed) {
-          console.log('should be deleting')
-          axios.delete(`${API_URL}/habits/${id}`, { headers })
-            .then(() => {
-              getHabits(token)
-              getHabits(token)
-            })
-            .catch(error => console.log(error))
-        }
+        confirmButtonColor: "green",
       })
+      if (result.isConfirmed){
+        // await axios.delete(`${API_URL}/habits/${id}`, { headers })
+        Swal.fire({
+          icon:"success",
+          title: "Deleted", 
+          text: `${habits[index].name} was deleted`, 
+          toast: true,
+          position: "top",
+          timer: 2000
+        })
+      } else {
+        Swal.fire({
+          icon:"error",
+          title: "Canceled", 
+          text: `${habits[index].name} was not deleted`, 
+          toast: true,
+          position: "top",
+          timer: 2000
+        })
+      }
     } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Error",
+        text: "Something went wrong"
+      })
       console.log(error)
     }
   }
-
-  useEffect(() => {
-    console.log('setou com o useeffect')
-    console.log(habits)
-    getHabits(token)
-  }, [])
 
   return (
     habits?.length ?
@@ -97,7 +93,7 @@ export default function ListHabits({ habits, setHabits, API_URL, token }) {
 }
 
 export const Habits = styled.ul`
-  height: 100vh;
+  margin-bottom: 120px;
   li{
     width: 340px;
     height: 90px;

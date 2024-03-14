@@ -6,14 +6,15 @@ import styled from "styled-components";
 import { Loader } from "../templates/Loader";
 import axios from "axios";
 import { Titles } from "../templates/Titles";
-import HabitContainer from "../components/CreateHabitContainer";
-import HabitsList from "../components/ListHabits";
+import CreateHabit from "../components/CreateHabitContainer";
+import ListHabits from "../components/ListHabits";
 import { useNavigate } from "react-router-dom";
 
 export default function Habits() {
   const { API_URL, user, setUser } = useContext(AuthContext)
   const [habits, setHabits] = useState(null)
   const [showForm, setShowForm] = useState(false)
+  const [animation, setAnimation] = useState(false)
   const navigate = useNavigate()
 
   async function getHabits(token) {
@@ -29,45 +30,57 @@ export default function Habits() {
     }
   }
 
+  function handleShowForm() {
+    if (showForm) {
+      setTimeout(() => setShowForm(false), 600)
+      setAnimation(true)
+    }
+    else {
+      setShowForm(true)
+      setAnimation(false)
+    }
+  }
+
   useEffect(() => {
     const localUser = JSON.parse(localStorage.getItem('user'));
     if (!user && !localUser)
       navigate('/')
     else {
-      setUser(localUser);
+      setUser(localUser)
+      getHabits(localUser.token)
     }
   }, [])
 
   return (
     user ?
-      <Main hasHabits={true}>
+      <Main>
         <Header image={user.image} />
         <Titles hasHabits={true}>
           <h1>Meus hábitos</h1>
-          <button onClick={() => setShowForm(!showForm)}>+</button>
+          <button onClick={handleShowForm}>+</button>
         </Titles>
-        {showForm ?
-          <HabitContainer
-            token={user.token}
-            setShowForm={setShowForm}
-            getHabits={getHabits}
-            setHabits={setHabits}
-          /> : ''}
-        <HabitsList token={user.token}
-          API_URL={API_URL}
+        <CreateHabit
+          token={user.token}
+          showForm={showForm}
+          animation={animation}
+          handleShowForm={handleShowForm}
+          getHabits={getHabits}
+          setHabits={setHabits}
+        />
+        <ListHabits token={user.token}
           habits={habits}
           setHabits={setHabits} />
 
         <Footer linkLeft={'today'} linkRight={'historic'} />
       </Main>
       : <Loader isBig={true} />
-      
+
   )
 }
 
 const Main = styled.main`
-  height: ${props => props.hasHabits ? "100vh" : "100%"};
-  margin-bottom: 70px;
+  min-height: 100vh;
+  height: 100%;
   background-color: #F2F2F2;
   display: flex;
   flex-direction: column;
