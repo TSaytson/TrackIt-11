@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react"
 import styled from "styled-components"
 
-export default function SelectDays({ day, index, days, list }) {
+export default function SelectDays({ day, index, days, list, habit }) {
   const [isSelected, setIsSelected] = useState(false)
 
   function handleSelectedDay(e) {
@@ -17,7 +17,8 @@ export default function SelectDays({ day, index, days, list }) {
 
   useEffect(() => {
     if (days.includes(index)) setIsSelected(true)
-  }, [])
+    else setIsSelected(false)
+  })
 
   return (
     <StyledWeekButton
@@ -41,11 +42,15 @@ const StyledWeekButton = styled.button`
   font-size: 20px;
   font-family: 'Lexend Deca';
   text-align: center;
-  transition: all .2s;
-  ${props => props.$list || `
+  transition: ${props => props.$list ? '' : 'transform .2s, color 1s'};
+  &:hover{
+    transform: ${props => props.$list ? '' : 'scale(1.1)'};
+  }
+  /* ${props => props.$list || `
     &:hover{
       transform: scale(1.1);
     }
-  `}
+    transition: transform .2s, color 1s
+  `} */
   
 `

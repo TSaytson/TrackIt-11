@@ -3,52 +3,46 @@ import { useEffect } from "react";
 import { Titles } from "../templates/Titles";
 import styled from "styled-components";
 import { weekDay } from "../constants/weekDays";
-import Swal from "sweetalert2";
 import SelectDays from "./SelectDays";
+import { Error, Toast } from "../templates/Swals";
 
 export default function ListHabits({ habits, setHabits, token }) {
 
-  async function deleteHabit(id, index) {
+  async function deleteHabit(id, habitIndex) {
     const headers = {
       "authorization": `Bearer ${token}`
     }
     try {
-      const result = await Swal.fire({
-        icon: "warning",
+      const result = await Toast.fire({
+        icon: "question",
         title: "Deleting habit",
-        text: `Do you want to delete ${habits[index].name} ?`,
+        text: `Do you want to delete ${habits[habitIndex].name} ?`,
         showDenyButton: true,
-        toast: true,
-        position: 'top',
         confirmButtonText: "Yes",
         confirmButtonColor: "green",
       })
-      if (result.isConfirmed){
+      if (result.isConfirmed) {
         // await axios.delete(`${API_URL}/habits/${id}`, { headers })
-        Swal.fire({
-          icon:"success",
-          title: "Deleted", 
-          text: `${habits[index].name} was deleted`, 
-          toast: true,
-          position: "top",
-          timer: 2000
+        Toast.fire({
+          icon: "warning",
+          title: "Deleted",
+          text: `${habits[habitIndex].name} was deleted`,
+          timer: 1500,
+          timerProgressBar: true,
+          showConfirmButton: false
         })
+        setHabits(habits.filter((habit) => habit.id != id))
       } else {
-        Swal.fire({
-          icon:"error",
-          title: "Canceled", 
-          text: `${habits[index].name} was not deleted`, 
-          toast: true,
-          position: "top",
-          timer: 2000
+        Toast.fire({
+          icon: "info",
+          title: "Canceled",
+          text: `${habits[index].name} was not deleted`,
+          timer: 1500,
+          showConfirmButton: false
         })
       }
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: "Something went wrong"
-      })
+      Error()
       console.log(error)
     }
   }
@@ -57,8 +51,8 @@ export default function ListHabits({ habits, setHabits, token }) {
     habits?.length ?
       <Habits>
         {
-          habits.map((habit, index) =>
-            <li key={index}>
+          habits.map((habit, habitIndex) => 
+            <li key={habitIndex}>
               <div>
                 <main className="weekButtons">
                   <h1>{habit.name}</h1>
@@ -69,12 +63,13 @@ export default function ListHabits({ habits, setHabits, token }) {
                       day={day}
                       days={habit.days}
                       list={true}
+                      habit={habit}
                     />
                   )}
                 </main>
                 <aside>
                   <ion-icon name="trash-outline"
-                    onClick={() => deleteHabit(habit.id, index)}
+                    onClick={() => deleteHabit(habit.id, habitIndex)}
                   />
                 </aside>
               </div>
@@ -108,12 +103,15 @@ export const Habits = styled.ul`
       margin-top: 10px;
       margin-right: 10px;
       cursor: pointer;
-      font-size: 24px;
+      font-size: 21px;
     }
     .weekButtons{
-      margin-top: 10px;
+      margin-top: 15px;
       margin-left: 15px;
       font-family: 'Lexend Deca';
+      h1{
+        margin-bottom: 5px;
+      }
     }
   }
 `

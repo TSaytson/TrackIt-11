@@ -62,7 +62,9 @@ export default function Habits() {
         <CreateHabit
           token={user.token}
           showForm={showForm}
+          setShowForm={setShowForm}
           animation={animation}
+          setAnimation={setAnimation}
           handleShowForm={handleShowForm}
           getHabits={getHabits}
           setHabits={setHabits}

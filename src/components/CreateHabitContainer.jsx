@@ -5,11 +5,11 @@ import axios from "axios";
 import { useContext } from "react";
 import { AuthContext } from "../contexts/Auth";
 import Swal from "sweetalert2";
-import WeekButton from "./SelectDays";
+import SelectDays from "./SelectDays";
 import { useEffect } from "react";
 
 export default function CreateHabitContainer({
-  getHabits, setHabits, showForm, animation, handleShowForm, token 
+  getHabits, setHabits, showForm, setShowForm, animation, setAnimation, handleShowForm, token
 }) {
   const { API_URL } = useContext(AuthContext)
   const [habitForm, setHabitForm] = useState({
@@ -42,11 +42,14 @@ export default function CreateHabitContainer({
         toast: true,
         position: "top",
         showConfirmButton: false,
-        timer: 2000
+        timer: 1500
       })
       //refactor
       getHabits(token)
-    } catch (error) {
+      setTimeout(() => setShowForm(false), 600)
+      setAnimation(true)
+    }
+    catch (error) {
       console.log(error)
       Swal.fire({
         icon: "error",
@@ -54,7 +57,7 @@ export default function CreateHabitContainer({
         toast: true,
         position: "top",
         showConfirmButton: false,
-        timer: 2000
+        timer: 1500
       })
     }
   }
@@ -63,40 +66,40 @@ export default function CreateHabitContainer({
     if (e.target.name === 'name')
       setHabitForm({ ...habitForm, [e.target.name]: e.target.value })
     else if (!habitForm[e.target.name].includes(e.target.id))
-        habitForm[e.target.name].push(e.target.id)
+      habitForm[e.target.name].push(e.target.id)
     console.log(habitForm)
   }
 
-  
+
 
   return (
     showForm ?
-    <HabitForm onSubmit={createHabit} $show={showForm} $animation={animation}>
-      <div className="habitInput">
-        <input
-          type="text"
-          name="name"
-          placeholder="nome do hábito"
-          onChange={handleHabitForm}
-        />
-      </div>
-
-      <ul className="weekButtons">
-        {weekDay.map((day, index) => 
-          <WeekButton
-            key={index}
-            name="days"
-            index={index}
-            day={day}
-            days={habitForm.days}
+      <HabitForm onSubmit={createHabit} $show={showForm} $animation={animation}>
+        <div className="habitInput">
+          <input
+            type="text"
+            name="name"
+            placeholder="nome do hábito"
+            onChange={handleHabitForm}
           />
-        )}
-      </ul>
+        </div>
 
-      <div className="controlButtons">
-        <button type="button" onClick={handleShowForm}>Cancelar</button>
-        <button type="submit">Salvar</button>
-      </div>
-    </HabitForm> : ''
+        <ul className="weekButtons">
+          {weekDay.map((day, index) =>
+            <SelectDays
+              key={index}
+              name="days"
+              index={index}
+              day={day}
+              days={habitForm.days}
+            />
+          )}
+        </ul>
+
+        <div className="controlButtons">
+          <button type="button" onClick={handleShowForm}>Cancelar</button>
+          <button type="submit">Salvar</button>
+        </div>
+      </HabitForm> : ''
   )
 }
