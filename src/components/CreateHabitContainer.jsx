@@ -7,11 +7,12 @@ import { AuthContext } from "../contexts/Auth";
 import Swal from "sweetalert2";
 import SelectDays from "./SelectDays";
 import { useEffect } from "react";
+import { MaximumHabitNameError, MinimumDaysError } from "../errors/HabitsErrors";
 
 export default function CreateHabitContainer({
-  getHabits, setHabits, showForm, setShowForm, animation, setAnimation, handleShowForm, token
+  getHabits, setHabits, showForm, setShowForm, animation, setAnimation, handleShowForm
 }) {
-  const { API_URL } = useContext(AuthContext)
+  const { API_URL, user } = useContext(AuthContext)
   const [habitForm, setHabitForm] = useState({
     name: '',
     days: []
@@ -20,21 +21,14 @@ export default function CreateHabitContainer({
   async function createHabit(e) {
     e.preventDefault();
     const headers = {
-      "authorization": `Bearer ${token}`
+      "authorization": `Bearer ${user.token}`
     }
     try {
-      if (!habitForm.days.length) {
-        throw {
-          response: {
-            data: {
-              details: 'Select at least one day'
-            }
-          }
-        }
-      }
-      console.log(habitForm)
+      if (!habitForm.days.length) throw MinimumDaysError()
+      if (habitForm.name.length > 20) throw MaximumHabitNameError()
+
       const response = await axios.post(`${API_URL}/habits`, habitForm, { headers });
-      console.log(response.data)
+
       Swal.fire({
         icon: "success",
         title: `Habit successfully created`,
@@ -45,7 +39,7 @@ export default function CreateHabitContainer({
         timer: 1500
       })
       //refactor
-      getHabits(token)
+      getHabits(user.token)
       setTimeout(() => setShowForm(false), 600)
       setAnimation(true)
     }
@@ -69,8 +63,6 @@ export default function CreateHabitContainer({
       habitForm[e.target.name].push(e.target.id)
     console.log(habitForm)
   }
-
-
 
   return (
     showForm ?

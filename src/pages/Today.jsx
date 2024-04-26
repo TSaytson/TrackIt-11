@@ -10,12 +10,12 @@ import { day } from "../utils/getDay";
 import { Loader } from "../templates/Loader";
 import ListHabits from "../components/ListHabits";
 import ListTodayHabits from "../components/ListTodayHabits";
+import { TodayHabitsContext } from "../contexts/TodayHabits";
 
 export default function Today() {
   const navigate = useNavigate();
   const { API_URL, user, setUser } = useContext(AuthContext);
-  const [habits, setHabits] = useState(null);
-  const [finishedHabits, setFinishedHabits] = useState([])
+  const {todayHabits, setTodayHabits, finishedHabits, setFinishedHabits} = useContext(TodayHabitsContext);
 
   async function getTodayHabits(token) {
     const headers = {
@@ -23,7 +23,9 @@ export default function Today() {
     }
     try {
       const response = await axios.get(`${API_URL}/habits/today`, { headers });
-      setHabits(response.data);
+      console.log(response.data)
+      setTodayHabits(response.data)
+      setFinishedHabits(response.data.filter(habit => habit.done))
     } catch (error) {
       console.log(error);
     }
@@ -36,29 +38,28 @@ export default function Today() {
     else {
       setUser(localUser);
       getTodayHabits(localUser.token);
-      console.log('console do useEffect', habits)
-      if (habits) {
-        setFinishedHabits(habits.filter(habit => habit.done))
-      }
     }
   }, [])
+
   return (
-    habits ?
-      <Div>
-        <Header image={user.image} />
-        <Titles>
+    todayHabits ?
+      <Main>
+        <Header/>
+        <Titles hasProgress={finishedHabits.length}>
           <h1>{day()}</h1>
-          <h2>{finishedHabits.length ? `` : 'There is no habit finished yet'}</h2>
+          <h2>{todayHabits.length ?
+            finishedHabits?.length ? `${(finishedHabits.length/todayHabits.length)*100}% concluido` 
+            : 'There is no habit finished yet' 
+            : 'No habits for today'}
+            </h2>
         </Titles>
-        <ListTodayHabits
-          habits={habits}
-        />
+        <ListTodayHabits/>
         <Footer linkLeft={'habits'} linkRight={'historic'} />
-      </Div > : <Loader isBig={true} />
+      </Main > : <Loader isBig={true} />
   )
 }
 
-const Div = styled.div`
+const Main = styled.main`
   height: 99vh;
   background-color: #F2F2F2;
   display: flex;

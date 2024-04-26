@@ -46,11 +46,4 @@ const StyledWeekButton = styled.button`
   &:hover{
     transform: ${props => props.$list ? '' : 'scale(1.1)'};
   }
-  /* ${props => props.$list || `
-    &:hover{
-      transform: scale(1.1);
-    }
-    transition: transform .2s, color 1s
-  `} */
-  
 `

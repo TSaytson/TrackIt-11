@@ -1,15 +1,8 @@
 import styled from "styled-components";
+import { spin } from "../utils/keyframes";
 
 export const Loader = styled.div`
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100%{
-      transform: rotate(360deg);
-    }
-  }
-  animation: spin 2s linear infinite;
+  animation: ${spin} 2s linear infinite;
   position: ${props => props.isBig ? 'absolute' : ''};
   top: ${props => props.isBig ? '50%' : ''};
   left: ${props => props.isBig ? '50%' : ''};

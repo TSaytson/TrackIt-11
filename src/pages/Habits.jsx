@@ -60,7 +60,6 @@ export default function Habits() {
           <button onClick={handleShowForm}>+</button>
         </Titles>
         <CreateHabit
-          token={user.token}
           showForm={showForm}
           setShowForm={setShowForm}
           animation={animation}
@@ -69,7 +68,7 @@ export default function Habits() {
           getHabits={getHabits}
           setHabits={setHabits}
         />
-        <ListHabits token={user.token}
+        <ListHabits
           habits={habits}
           setHabits={setHabits} />
 

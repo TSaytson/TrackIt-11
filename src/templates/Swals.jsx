@@ -7,4 +7,4 @@ export const Toast = Swal.mixin({
 })
 
 export const Error =
-  () => Swal.fire("Error", "Something went wrong", "error")
+  (message) => Swal.fire("Error", message ? message : "Something went wrong", "error")

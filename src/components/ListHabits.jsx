@@ -5,12 +5,20 @@ import styled from "styled-components";
 import { weekDay } from "../constants/weekDays";
 import SelectDays from "./SelectDays";
 import { Error, Toast } from "../templates/Swals";
+import { Loader } from "../templates/Loader";
+import { useState } from "react";
+import { useContext } from "react";
+import { AuthContext } from "../contexts/Auth";
+import { fadeIn } from "../utils/keyframes";
 
-export default function ListHabits({ habits, setHabits, token }) {
+export default function ListHabits({ habits, setHabits }) {
+
+  const {API_URL, user} = useContext(AuthContext)
+  const [loading, setLoading] = useState(true)
 
   async function deleteHabit(id, habitIndex) {
     const headers = {
-      "authorization": `Bearer ${token}`
+      "authorization": `Bearer ${user.token}`
     }
     try {
       const result = await Toast.fire({
@@ -22,7 +30,7 @@ export default function ListHabits({ habits, setHabits, token }) {
         confirmButtonColor: "green",
       })
       if (result.isConfirmed) {
-        // await axios.delete(`${API_URL}/habits/${id}`, { headers })
+        await axios.delete(`${API_URL}/habits/${id}`, { headers })
         Toast.fire({
           icon: "warning",
           title: "Deleted",
@@ -36,7 +44,7 @@ export default function ListHabits({ habits, setHabits, token }) {
         Toast.fire({
           icon: "info",
           title: "Canceled",
-          text: `${habits[index].name} was not deleted`,
+          text: `${habits[habitIndex].name} was not deleted`,
           timer: 1500,
           showConfirmButton: false
         })
@@ -47,8 +55,12 @@ export default function ListHabits({ habits, setHabits, token }) {
     }
   }
 
+  useEffect(() => {
+    habits?.length ? setLoading(false) : setTimeout(() => {setLoading(false)}, 1500)
+  })
   return (
-    habits?.length ?
+    loading ?
+    <Loader isBig={true}/> : habits.length ?
       <Habits>
         {
           habits.map((habit, habitIndex) => 
@@ -88,6 +100,7 @@ export default function ListHabits({ habits, setHabits, token }) {
 }
 
 export const Habits = styled.ul`
+  animation: ${fadeIn} 3s;
   margin-bottom: 120px;
   li{
     width: 340px;

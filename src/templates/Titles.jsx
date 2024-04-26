@@ -1,18 +1,9 @@
 import styled from "styled-components";
+import {appearLeft} from '../utils/keyframes'
 
 export const Titles = styled.section`
-  @keyframes animateLeft {
-    0%{
-      opacity: 0;
-      left: -100px;
-    }
-    100%{
-      left: 0;
-    }
-  }
   position: relative;
-  animation: animateLeft;
-  animation-duration: 2s;
+  animation: ${appearLeft} 2s;
   margin-bottom: 30px;
   width: 100%;
   max-width: 340px;
@@ -40,6 +31,7 @@ export const Titles = styled.section`
     font-size: 23px;
     font-family: 'Lexend Deca';
     color: #126BA5;
+    margin-bottom: 5px;
   }
   h2{
     font-size: 18px;

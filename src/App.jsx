@@ -7,6 +7,7 @@ import SignUp from './pages/SignUp'
 import Today from './pages/Today'
 import Historic from './pages/Historic'
 import Habits from './pages/Habits'
+import TodayHabitsProvider from './contexts/TodayHabits'
 
 
 
@@ -16,15 +17,17 @@ function App() {
     <>
       <ResetCSS />
       <BrowserRouter>
-        <AuthProvider>
-          <Routes>
-            <Route path='/' element={<SignIn />} />
-            <Route path='/sign-up' element={<SignUp />} />
-            <Route path='/today' element={<Today />} />
-            <Route path='/historic' element={<Historic />}/>
-            <Route path='/habits' element={<Habits />}/>
-          </Routes>
-        </AuthProvider>
+        <TodayHabitsProvider>
+          <AuthProvider>
+            <Routes>
+              <Route path='/' element={<SignIn />} />
+              <Route path='/sign-up' element={<SignUp />} />
+              <Route path='/today' element={<Today />} />
+              <Route path='/historic' element={<Historic />} />
+              <Route path='/habits' element={<Habits />} />
+            </Routes>
+          </AuthProvider>
+        </TodayHabitsProvider>
       </BrowserRouter>
     </>
   )
