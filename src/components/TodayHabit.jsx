@@ -4,26 +4,40 @@ import { useState } from "react";
 import styled from "styled-components";
 import { AuthContext } from "../contexts/Auth";
 import axios from "axios";
-import { Error, Toast } from "../templates/Swals";
-import { TodayHabitsContext } from "../contexts/TodayHabits";
+import { Error } from "../templates/Swals";
+import { TodayContext } from "../contexts/TodayContext";
 
-export default function TodayHabit({ habit }) {
+export default function TodayHabit({ habit, loading, setLoading }) {
 
   const { API_URL, user } = useContext(AuthContext)
-  const { finishedHabits, setFinishedHabits } = useContext(TodayHabitsContext)
+  const { finishedHabits, setFinishedHabits } = useContext(TodayContext)
   const [isCompleted, setIsCompleted] = useState(null)
+  const [record, setRecord] = useState(false)
 
   async function handleCompleted(habit) {
     const headers = {
       authorization: `Bearer ${user.token}`
     }
+    setLoading(true)
     try {
       if (isCompleted) {
-        // await axios.post(`${API_URL}/habits/${habit.id}/uncheck`, {}, { headers })
+        await axios.post(`${API_URL}/habits/${habit.id}/uncheck`, {}, { headers })
+        if (habit.currentSequence === habit.highestSequence)
+          habit.highestSequence--
+        habit.currentSequence--
+        setRecord(false)
         setFinishedHabits(finishedHabits.filter(finishedHabit => finishedHabit.id !== habit.id))
       }
       else {
-        // await axios.post(`${API_URL}/habits/${habit.id}/check`, {}, { headers })
+        await axios.post(`${API_URL}/habits/${habit.id}/check`, {}, { headers })
+
+        if (habit.currentSequence === habit.highestSequence){
+          habit.highestSequence++
+          setRecord(true)
+        }
+        habit.currentSequence++
+        if (habit.currentSequence === habit.highestSequence)
+          setRecord(true)
         setFinishedHabits([...finishedHabits, habit])
       }
       console.log(finishedHabits)
@@ -32,24 +46,27 @@ export default function TodayHabit({ habit }) {
       console.log(error)
       Error(error.response.data.message)
     }
+    setLoading(false)
   }
 
   useEffect(() => {
     if (habit.done) setIsCompleted(true)
     else setIsCompleted(false)
+    if (habit.currentSequence && habit.currentSequence === habit.highestSequence)
+      setRecord(true)
   }, [])
 
   return (
-    <StyledTodayHabit $isCompleted={isCompleted}>
+    <StyledTodayHabit $isCompleted={isCompleted} $record={record}>
       <div>
         <main>
           <h1>{habit.name}</h1>
-          <p>Sequência atual: {habit.currentSequence} dias</p>
-          <p>Seu recorde: {habit.highestSequence} dias</p>
+          <p>Sequência atual: <span className="current">{habit.currentSequence} dias</span></p>
+          <p>Seu recorde: <span className="record">{habit.highestSequence} dias </span></p>
         </main>
         <aside>
           <ion-icon name="checkmark"
-            onClick={() => handleCompleted(habit)}
+            onClick={() => loading ? '' : handleCompleted(habit)}
           />
         </aside>
       </div>
@@ -73,6 +90,12 @@ const StyledTodayHabit = styled.div`
       p{
         font-size: 13px;
         line-height: 16px;
+        .current{
+          color: ${props => props.$isCompleted ? '#8fc549' : 'black'} ;
+        }
+        .record{
+          color: ${props => props.$record ? '#8fc549' : 'black'}
+        }
       }
     }
     aside{

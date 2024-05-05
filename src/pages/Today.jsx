@@ -10,12 +10,12 @@ import { day } from "../utils/getDay";
 import { Loader } from "../templates/Loader";
 import ListHabits from "../components/ListHabits";
 import ListTodayHabits from "../components/ListTodayHabits";
-import { TodayHabitsContext } from "../contexts/TodayHabits";
+import { TodayContext } from "../contexts/TodayContext";
 
 export default function Today() {
   const navigate = useNavigate();
   const { API_URL, user, setUser } = useContext(AuthContext);
-  const {todayHabits, setTodayHabits, finishedHabits, setFinishedHabits} = useContext(TodayHabitsContext);
+  const {todayHabits, setTodayHabits, finishedHabits, setFinishedHabits} = useContext(TodayContext);
 
   async function getTodayHabits(token) {
     const headers = {
@@ -47,8 +47,8 @@ export default function Today() {
         <Header/>
         <Titles hasProgress={finishedHabits.length}>
           <h1>{day()}</h1>
-          <h2>{todayHabits.length ?
-            finishedHabits?.length ? `${(finishedHabits.length/todayHabits.length)*100}% concluido` 
+          <h2>{todayHabits.length ? finishedHabits?.length ? 
+          `${((finishedHabits.length/todayHabits.length)*100).toFixed(0)}% concluido` 
             : 'There is no habit finished yet' 
             : 'No habits for today'}
             </h2>

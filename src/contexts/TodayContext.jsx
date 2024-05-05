@@ -1,6 +1,6 @@
 import {createContext, useState } from "react";
 
-export const TodayHabitsContext = createContext({})
+export const TodayContext = createContext({})
 
 export default function TodayHabitsProvider({children}){
 
@@ -8,10 +8,10 @@ export default function TodayHabitsProvider({children}){
   const [finishedHabits, setFinishedHabits] = useState(null)
 
   return (
-    <TodayHabitsContext.Provider value={{
+    <TodayContext.Provider value={{
       todayHabits, setTodayHabits, finishedHabits, setFinishedHabits
     }}>
       {children}
-    </TodayHabitsContext.Provider>
+    </TodayContext.Provider>
   )
 }

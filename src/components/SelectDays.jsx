@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useState } from "react"
 import styled from "styled-components"
 
-export default function SelectDays({ day, index, days, list, habit }) {
+export default function SelectDays({ day, index, days, list }) {
   const [isSelected, setIsSelected] = useState(false)
 
   function handleSelectedDay(e) {

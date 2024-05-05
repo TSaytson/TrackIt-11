@@ -3,11 +3,11 @@ import styled from "styled-components"
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar"
 import 'react-circular-progressbar/dist/styles.css'
 import { useContext } from "react"
-import { TodayHabitsContext } from "../contexts/TodayHabits"
+import { TodayContext } from "../contexts/TodayContext"
 
 export default function Footer() {
 
-  const {todayHabits, finishedHabits} = useContext(TodayHabitsContext)
+  const {todayHabits, finishedHabits} = useContext(TodayContext)
   
   return (
     <StyledFooter>

@@ -60,7 +60,7 @@ export default function ListHabits({ habits, setHabits }) {
   })
   return (
     loading ?
-    <Loader isBig={true}/> : habits.length ?
+    <Loader isBig={true}/> : habits?.length ?
       <Habits>
         {
           habits.map((habit, habitIndex) => 
@@ -75,7 +75,6 @@ export default function ListHabits({ habits, setHabits }) {
                       day={day}
                       days={habit.days}
                       list={true}
-                      habit={habit}
                     />
                   )}
                 </main>

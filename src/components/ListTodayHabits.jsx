@@ -7,15 +7,13 @@ import { useEffect } from "react"
 import TodayHabit from "./TodayHabit"
 import { fadeIn } from "../utils/keyframes"
 import { useContext } from "react"
-import { TodayHabitsContext } from "../contexts/TodayHabits"
+import { TodayContext } from "../contexts/TodayContext"
 
 export default function ListTodayHabits() {
 
-  const {todayHabits, finishedHabits} = useContext(TodayHabitsContext)
-
-  useEffect(() => {
-    console.log(todayHabits, finishedHabits)
-  }, [])
+  const [loading, setLoading] = useState(false)
+  const {todayHabits} = useContext(TodayContext)
+  
   return (
     todayHabits?.length ?
       <Habits>
@@ -23,6 +21,8 @@ export default function ListTodayHabits() {
           todayHabits.map((habit, index) =>
             <li key={index}>
               <TodayHabit habit={habit}
+              loading={loading}
+              setLoading={setLoading}
               />
             </li>
           )
