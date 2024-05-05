@@ -12,5 +12,4 @@ export const Loader = styled.div`
   width: ${props => props.isBig ? '120px' : '18px'};
   height: ${props => props.isBig ? '120px' : '18px'};
   border-radius: 50%;
-
 `

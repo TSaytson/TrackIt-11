@@ -10,11 +10,11 @@ export const HabitForm = styled.form`
   background-color: white;
   border-radius: 5px;
   margin-bottom: 30px;
-  div, ul{
+  >div, ul{
     width: 90%;
     margin-left: 16px;
     button, li{
-      cursor: pointer;
+      cursor: ${props => props.$loading ? 'not-allowed' : 'pointer'};
     }
   }
   .habitInput{
@@ -30,6 +30,14 @@ export const HabitForm = styled.form`
         font-size: 20px;
         color: #dbdbdb;
       }
+      ${(props) =>
+      props.$loading ?
+      css`
+        cursor: not-allowed; 
+        background-color: #f0f0f0
+        `:
+      css`cursor: text`
+  }
     }
   }
 
@@ -43,6 +51,9 @@ export const HabitForm = styled.form`
     display: flex;
     justify-content: flex-end;
     button{
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-family: 'Lexend Deca';
       height: 35px;
       width: 84px;

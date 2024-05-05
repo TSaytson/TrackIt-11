@@ -23,7 +23,6 @@ export default function Habits() {
     }
     try {
       const response = await axios.get(`${API_URL}/habits`, { headers });
-      console.log('setou com o get habits', response.data);
       setHabits(response.data);
     } catch (error) {
       console.log(error);
