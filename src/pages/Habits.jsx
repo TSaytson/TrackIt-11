@@ -9,21 +9,20 @@ import { Titles } from "../templates/Titles";
 import CreateHabit from "../components/CreateHabitContainer";
 import ListHabits from "../components/ListHabits";
 import { useNavigate } from "react-router-dom";
+import { TodayContext } from "../contexts/TodayContext";
+import { getHabits } from "../services/habitsApi";
 
 export default function Habits() {
-  const { API_URL, user, setUser } = useContext(AuthContext)
+  const { user, setUser } = useContext(AuthContext)
   const [habits, setHabits] = useState(null)
   const [showForm, setShowForm] = useState(false)
   const [animation, setAnimation] = useState(false)
   const navigate = useNavigate()
 
-  async function getHabits(token) {
-    const headers = {
-      "authorization": `Bearer ${token}`
-    }
+  async function fetchHabits(token) {
     try {
-      const response = await axios.get(`${API_URL}/habits`, { headers });
-      setHabits(response.data);
+      const response = await getHabits(token)
+      setHabits(response);
     } catch (error) {
       console.log(error);
     }
@@ -46,14 +45,14 @@ export default function Habits() {
       navigate('/')
     else {
       setUser(localUser)
-      getHabits(localUser.token)
+      fetchHabits(localUser.token)
     }
   }, [])
 
   return (
     user ?
       <Main>
-        <Header image={user.image} />
+        <Header/>
         <Titles hasHabits={true}>
           <h1>Meus hábitos</h1>
           <button onClick={handleShowForm}>+</button>
@@ -64,7 +63,7 @@ export default function Habits() {
           animation={animation}
           setAnimation={setAnimation}
           handleShowForm={handleShowForm}
-          getHabits={getHabits}
+          habits={habits}
           setHabits={setHabits}
         />
         <ListHabits

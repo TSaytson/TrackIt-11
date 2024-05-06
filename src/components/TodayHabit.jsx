@@ -6,6 +6,7 @@ import { AuthContext } from "../contexts/Auth";
 import axios from "axios";
 import { Error } from "../templates/Swals";
 import { TodayContext } from "../contexts/TodayContext";
+import { checkTodayHabit, uncheckTodayHabit } from "../services/todayApi";
 
 export default function TodayHabit({ habit, loading, setLoading }) {
 
@@ -15,13 +16,10 @@ export default function TodayHabit({ habit, loading, setLoading }) {
   const [record, setRecord] = useState(false)
 
   async function handleCompleted(habit) {
-    const headers = {
-      authorization: `Bearer ${user.token}`
-    }
     setLoading(true)
     try {
       if (isCompleted) {
-        await axios.post(`${API_URL}/habits/${habit.id}/uncheck`, {}, { headers })
+        await uncheckTodayHabit(user.token, habit.id)
         if (habit.currentSequence === habit.highestSequence)
           habit.highestSequence--
         habit.currentSequence--
@@ -29,9 +27,8 @@ export default function TodayHabit({ habit, loading, setLoading }) {
         setFinishedHabits(finishedHabits.filter(finishedHabit => finishedHabit.id !== habit.id))
       }
       else {
-        await axios.post(`${API_URL}/habits/${habit.id}/check`, {}, { headers })
-
-        if (habit.currentSequence === habit.highestSequence){
+        await checkTodayHabit(user.token, habit.id)
+        if (habit.currentSequence === habit.highestSequence) {
           habit.highestSequence++
           setRecord(true)
         }
@@ -40,7 +37,6 @@ export default function TodayHabit({ habit, loading, setLoading }) {
           setRecord(true)
         setFinishedHabits([...finishedHabits, habit])
       }
-      console.log(finishedHabits)
       setIsCompleted(!isCompleted)
     } catch (error) {
       console.log(error)
@@ -61,8 +57,12 @@ export default function TodayHabit({ habit, loading, setLoading }) {
       <div>
         <main>
           <h1>{habit.name}</h1>
-          <p>Sequência atual: <span className="current">{habit.currentSequence} dias</span></p>
-          <p>Seu recorde: <span className="record">{habit.highestSequence} dias </span></p>
+          <p>Sequência atual:
+            <span className="current">{habit.currentSequence} dias</span>
+          </p>
+          <p>Seu recorde:
+            <span className="record">{habit.highestSequence} dias </span>
+          </p>
         </main>
         <aside>
           <ion-icon name="checkmark"

@@ -10,16 +10,16 @@ import { useState } from "react";
 import { useContext } from "react";
 import { AuthContext } from "../contexts/Auth";
 import { fadeIn } from "../utils/keyframes";
+import { useDeleteHabit } from "../hooks/useDeleteHabit";
+import { TodayContext } from "../contexts/TodayContext";
 
 export default function ListHabits({ habits, setHabits }) {
 
-  const {API_URL, user} = useContext(AuthContext)
+  const {user} = useContext(AuthContext)
+  const {setTodayHabits, setFinishedHabits} = useContext(TodayContext)
   const [loading, setLoading] = useState(true)
 
   async function deleteHabit(id, habitIndex) {
-    const headers = {
-      "authorization": `Bearer ${user.token}`
-    }
     try {
       const result = await Toast.fire({
         icon: "question",
@@ -30,7 +30,7 @@ export default function ListHabits({ habits, setHabits }) {
         confirmButtonColor: "green",
       })
       if (result.isConfirmed) {
-        await axios.delete(`${API_URL}/habits/${id}`, { headers })
+        await useDeleteHabit(id, user.token, setTodayHabits, setFinishedHabits)
         Toast.fire({
           icon: "warning",
           title: "Deleted",

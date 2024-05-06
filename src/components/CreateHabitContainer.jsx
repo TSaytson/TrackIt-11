@@ -1,19 +1,19 @@
 import { useState } from "react";
 import { HabitForm } from "../templates/HabitForm"
 import { weekDay } from "../constants/weekDays";
-import axios from "axios";
 import { useContext } from "react";
 import { AuthContext } from "../contexts/Auth";
 import Swal from "sweetalert2";
 import SelectDays from "./SelectDays";
-import { useEffect } from "react";
-import { MaximumHabitNameError, MinimumDaysError } from "../errors/HabitsErrors";
 import { Loader } from "../templates/Loader";
+import { useCreateHabit } from "../hooks/useCreateHabit";
+import { TodayContext } from "../contexts/TodayContext";
 
 export default function CreateHabitContainer({
-  getHabits, showForm, setShowForm, animation, setAnimation, handleShowForm
+  habits, setHabits, showForm, setShowForm, animation, setAnimation, handleShowForm
 }) {
-  const { API_URL, user } = useContext(AuthContext)
+  const { user } = useContext(AuthContext)
+  const {setTodayHabits, setFinishedHabits} = useContext(TodayContext)
   const [habitForm, setHabitForm] = useState({
     name: '',
     days: []
@@ -22,28 +22,21 @@ export default function CreateHabitContainer({
 
   async function createHabit(e) {
     e.preventDefault();
-    const headers = {
-      "authorization": `Bearer ${user.token}`
-    }
     setLoading(true)
     if (!loading)
       try {
-        if (!habitForm.days.length) throw MinimumDaysError()
-        if (habitForm.name.length > 20) throw MaximumHabitNameError()
-
-        const response = await axios.post(`${API_URL}/habits`, habitForm, { headers });
-
+        const response = await useCreateHabit(
+          user.token, habitForm, habits, setHabits, setTodayHabits, setFinishedHabits
+        )
         Swal.fire({
           icon: "success",
           title: `Habit successfully created`,
-          text: `${response.data.name}`,
+          text: `${response.name}`,
           toast: true,
           position: "top",
           showConfirmButton: false,
           timer: 1500
         })
-        //refactor
-        getHabits(user.token)
         setTimeout(() => setShowForm(false), 600)
         setAnimation(true)
         setHabitForm({ name: '', days: [] })

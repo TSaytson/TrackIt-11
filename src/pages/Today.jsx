@@ -5,27 +5,20 @@ import { useContext, useState, useEffect } from "react";
 import { AuthContext } from "../contexts/Auth";
 import { Titles } from "../templates/Titles";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { day } from "../utils/getDay";
 import { Loader } from "../templates/Loader";
-import ListHabits from "../components/ListHabits";
 import ListTodayHabits from "../components/ListTodayHabits";
 import { TodayContext } from "../contexts/TodayContext";
+import { useTodayHabits } from "../hooks/useTodayHabits";
 
 export default function Today() {
-  const navigate = useNavigate();
-  const { API_URL, user, setUser } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
   const {todayHabits, setTodayHabits, finishedHabits, setFinishedHabits} = useContext(TodayContext);
-
-  async function getTodayHabits(token) {
-    const headers = {
-      "authorization": `Bearer ${token}`
-    }
+  const navigate = useNavigate();
+  
+  async function fetchTodayHabits(token) {
     try {
-      const response = await axios.get(`${API_URL}/habits/today`, { headers });
-      console.log(response.data)
-      setTodayHabits(response.data)
-      setFinishedHabits(response.data.filter(habit => habit.done))
+      await useTodayHabits(token, setTodayHabits, setFinishedHabits)
     } catch (error) {
       console.log(error);
     }
@@ -37,7 +30,7 @@ export default function Today() {
       navigate('/')
     else {
       setUser(localUser);
-      getTodayHabits(localUser.token);
+      fetchTodayHabits(localUser.token);
     }
   }, [])
 

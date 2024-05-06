@@ -6,6 +6,7 @@ import axios from "axios";
 import { AuthContext } from "../contexts/Auth";
 import Swal from "sweetalert2";
 import { Loader } from "../templates/Loader";
+import { signIn } from "../services/authApi";
 
 export default function SignIn() {
   const navigate = useNavigate();
@@ -25,10 +26,8 @@ export default function SignIn() {
     e.preventDefault();
     try {
       setIsLoading(true);
-      const response =
-        await axios.post(`${API_URL}/auth/login`, form);
 
-      const { name, image, token } = response.data;
+      const { name, image, token } = await signIn(form);
       setUser({ name, image, token });
 
       localStorage.setItem('user',
@@ -36,13 +35,14 @@ export default function SignIn() {
 
       Swal.fire({
         icon: "success",
-        title: `Welcome ${response.data.name}!`,
+        title: `Welcome ${name}!`,
         showConfirmButton: false,
         timer: 2000,
         footer: "You will be redirected to today's page"
       });
       setTimeout(() => navigate('/today'), 2000);
     } catch (error) {
+      console.log(error.response)
       Swal.fire({
         icon: "error",
         title: `${error.response.data.message}`,

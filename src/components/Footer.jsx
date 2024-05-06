@@ -4,25 +4,34 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar"
 import 'react-circular-progressbar/dist/styles.css'
 import { useContext } from "react"
 import { TodayContext } from "../contexts/TodayContext"
+import { AuthContext } from "../contexts/Auth"
+import { useEffect } from "react"
+import axios from "axios"
+import { useTodayHabits } from "../hooks/useTodayHabits"
 
 export default function Footer() {
 
-  const {todayHabits, finishedHabits} = useContext(TodayContext)
-  
+  const { todayHabits, setTodayHabits, finishedHabits, setFinishedHabits } = useContext(TodayContext)
+  const { user } = useContext(AuthContext)
+
+  useEffect(() => {
+    useTodayHabits(user.token, setTodayHabits, setFinishedHabits)
+  }, [])
+
   return (
     <StyledFooter>
       <Link to='/habits'>Hábitos</Link>
       <Link to='/today'>
         <div>
           <CircularProgressbar value={finishedHabits?.length ?
-          (finishedHabits.length/todayHabits.length)*100 : 0}
+            (finishedHabits.length / todayHabits.length) * 100 : 0}
             text="Hoje"
             styles={buildStyles({
               pathTransitionDuration: 0.5,
               pathColor: '#fff',
               textColor: '#fff',
               trailColor: '#52b6ff',
-          })}/>
+            })} />
         </div>
       </Link>
       <Link to='/historic'>Histórico</Link>

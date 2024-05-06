@@ -17,8 +17,8 @@ function App() {
     <>
       <ResetCSS />
       <BrowserRouter>
-        <TodayProvider>
-          <AuthProvider>
+        <AuthProvider>
+          <TodayProvider>
             <Routes>
               <Route path='/' element={<SignIn />} />
               <Route path='/sign-up' element={<SignUp />} />
@@ -26,8 +26,8 @@ function App() {
               <Route path='/historic' element={<Historic />} />
               <Route path='/habits' element={<Habits />} />
             </Routes>
-          </AuthProvider>
-        </TodayProvider>
+          </TodayProvider>
+        </AuthProvider>
       </BrowserRouter>
     </>
   )

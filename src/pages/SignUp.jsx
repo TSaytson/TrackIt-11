@@ -6,10 +6,11 @@ import { AuthContext } from "../contexts/Auth";
 import { LoginForm } from '../templates/LoginForm'
 import Swal from "sweetalert2";
 import { Loader } from "../templates/Loader";
+import { signUp } from "../services/authApi";
 
 export default function SignUp() {
   const navigate = useNavigate();
-  const { API_URL } = useContext(AuthContext);
+
   const [form, setForm] = useState({
     email: '',
     password: '',
@@ -22,19 +23,18 @@ export default function SignUp() {
     e.preventDefault();
     try {
       setIsLoading(true);
-      const response =
-        await axios.post(`${API_URL}/auth/sign-up`, form);
+      const response = await signUp(form)
       Swal.fire({
         icon: "success",
         title: 'Created',
-        text: `User ${response.data.name} successfully created`,
+        text: `User ${response.name} successfully created`,
         showConfirmButton: false,
         timer: 2000,
         footer: 'You will be redirected to sign in page'
       })
       setTimeout(() => navigate('/'), 2000);
     } catch (error) {
-      console.log(error.response.data);
+      console.log(error.response);
       Swal.fire({
         icon: "error",
         title: `${error.response.data.message}`,
